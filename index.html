@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="description" content="Creativity takes time. Cosapio designs a holistic solution around your agency's judgment and taste, with AI taking care of the heavy lifting.">
-<script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches){var R=document.documentElement;R.classList.add("intro");setTimeout(function(){if(!window.__introOn){R.classList.add("done","nointro")}},8000)}}catch(e){}</script>
+<script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches){var R=document.documentElement;R.classList.add("intro","hs");setTimeout(function(){if(!window.__introOn){R.classList.add("done","nointro")}},8000)}}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -46,11 +46,27 @@ nav{display:flex;align-items:center;gap:24px;max-width:1240px;margin:0 auto;padd
 .links a{text-decoration:none;color:var(--muted)}.links a:hover{color:var(--ink)}
 @media(max-width:900px){.links{display:none}nav .btn{margin-left:auto}}
 /* hero */
-.hero{text-align:center;padding:0 max(5vw,18px);min-height:calc(100vh - 66px);min-height:calc(100svh - 66px);display:flex;flex-direction:column;justify-content:center;padding-bottom:6vh}
-.hero h1{font-size:clamp(34px,4.6vw,62px);line-height:1.04;font-weight:800;letter-spacing:-.04em;margin:0 auto;max-width:18ch}
+/* Static by default (no JS, reduced motion): everything fully lit. With .hs on <html> the hero becomes a tall
+   section whose inner .hero-pin sticks under the header while scroll progress brightens the headline, then the sub. */
+.hero{--hh:73px;--dim:#6E6C67;--lit:#FFFFFF;text-align:center;color:var(--lit)}
+.hero-pin{padding:0 max(5vw,18px) 6vh;min-height:calc(100vh - var(--hh));min-height:calc(100svh - var(--hh));display:flex;flex-direction:column;justify-content:center}
+.hero h1{font-size:clamp(40px,min(6.6vw,11.5vh),104px);line-height:1;font-weight:800;letter-spacing:-.045em;margin:0 auto;max-width:none;color:var(--lit)}
+.hero .ln{display:block}
 .kick{display:inline-block;margin:0 0 22px;padding:7px 14px;border-radius:999px;background:var(--rl);font-weight:600;font-size:15px}
-.hero h1 span{display:block;color:var(--muted);font-weight:700}
-.hero .sub{max-width:34ch;margin:28px auto 0;font-size:clamp(19px,1.9vw,26px);line-height:1.45;letter-spacing:-.01em}
+.hero .sub{max-width:none;margin:clamp(26px,4.4vh,44px) auto 0;font-size:clamp(19px,min(1.9vw,3.2vh),27px);line-height:1.45;letter-spacing:-.01em}
+.hero .wd{white-space:nowrap}
+.hero .vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hs .hero{--run:110vh;height:calc(100vh - var(--hh) + var(--run))}
+@supports(height:1svh){.hs .hero{--run:110svh;height:calc(100svh - var(--hh) + var(--run))}}
+.hs .hero-pin{position:sticky;top:var(--hh);height:calc(100vh - var(--hh));height:calc(100svh - var(--hh));min-height:0;overflow:hidden}
+.hs .hero .l2,.hs .hero .l3{color:var(--dim)}
+.hs .hero .sub{color:var(--dim);opacity:0}
+@media(max-width:760px){
+  .hero h1{font-size:clamp(38px,11vw,60px);line-height:1.02}
+  .hero .l2,.hero .l3{display:inline}
+  .hero .sub .ln{display:inline}
+  .hero .sub{max-width:30ch}
+}
 .hero .sub b{font-weight:600}
 .hero .joke{margin-top:14px;font-size:16px;font-weight:600}
 .hero .joke code{font:600 14px/1 ui-monospace,Menlo,monospace;background:var(--yl);padding:3px 7px;border-radius:6px;color:var(--ink)}
@@ -214,7 +230,6 @@ header{background:rgba(20,20,22,.55);backdrop-filter:blur(18px) saturate(140%);-
 .fc.stack::before{background:rgba(32,32,36,.92);border:1px solid var(--glassb);box-shadow:0 10px 26px rgba(0,0,0,.3)}
 .tag{color:var(--ink)}
 .rail i{border-color:var(--bg)}
-.hero .sub{color:var(--muted)}.hero .sub b{color:var(--ink)}
 
 </style>
 </head>
@@ -251,10 +266,10 @@ header{background:rgba(20,20,22,.55);backdrop-filter:blur(18px) saturate(140%);-
 </nav></header>
 
 <main id="top">
-<section class="hero">
-  <h1 class="split">Creativity takes time. <span>We spend ours to give yours back.</span></h1>
-  <p class="sub rv" style="transition-delay:.15s">A human-led mission to empower human creativity, transforming legacy organizations into AI-native powerhouses.</p>
-</section>
+<section class="hero" id="hero"><div class="hero-pin">
+  <h1 class="split"><span class="ln l1">Creativity takes time.</span> <span class="ln l2">We spend ours to</span> <span class="ln l3">give yours back.</span></h1>
+  <p class="sub"><span class="ln">A human-led mission to empower human creativity,</span> <span class="ln">transforming legacy organizations into AI powerhouses.</span></p>
+</div></section>
 
 
 <section class="band howtop rv" id="how" style="transition-delay:.3s"><div class="wrap">
@@ -481,6 +496,48 @@ const draw=()=>{
   svg.innerHTML=h;};
 const ro=new ResizeObserver(draw);ro.observe(fig);
 }
+/* hero: pinned scroll reveal. The section is taller than the screen and .hero-pin is position:sticky, so native
+   scrolling drives everything: lines 2-3 of the headline brighten grey -> white character by character, then the
+   supporting statement fades in and brightens over a shorter distance, then the pin releases into the next section.
+   Progress is read straight from scroll position, so stopping pauses it and scrolling back reverses it. */
+{
+const root=document.documentElement,hero=document.getElementById('hero'),pin=hero.querySelector('.hero-pin');
+const h1=hero.querySelector('h1'),sub=hero.querySelector('.sub'),hdr=document.querySelector('header');
+const rm=matchMedia('(prefers-reduced-motion: reduce)');
+/* split each line into nowrap words of per-character spans; screen readers get one plain copy instead */
+let wi=0;
+const splitHero=(el,wordCls)=>{const vh=document.createElement('span');vh.className='vh';vh.textContent=el.textContent.replace(/\s+/g,' ').trim();
+  el.querySelectorAll('.ln').forEach(ln=>{ln.setAttribute('aria-hidden','true');const f=document.createDocumentFragment();
+    ln.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(' '));return}
+      const w=document.createElement('span');w.className=wordCls;if(el===h1)w.style.setProperty('--i',wi++);
+      for(const ch of t){const c=document.createElement('span');c.className='c';c.textContent=ch;w.appendChild(c)}
+      f.appendChild(w)});
+    ln.textContent='';ln.appendChild(f)});
+  el.prepend(vh)};
+splitHero(h1,'w wd');splitHero(sub,'wd');
+const headC=[...h1.querySelectorAll('.l2 .c,.l3 .c')],subC=[...sub.querySelectorAll('.c')];
+const HEAD=.6,SUB=.3; /* shares of the pinned scroll: headline, then the faster sub; the last 10% is a short hold */
+const DIM=[110,108,103],LIT=[255,255,255];
+const clamp=v=>v<0?0:v>1?1:v;
+const wave=(cs,p,W)=>{const x=p*(cs.length+W);
+  for(let i=0;i<cs.length;i++){let v=clamp((x-i)/W);v=v*v*(3-2*v);v=Math.round(v*100)/100;
+    if(cs[i]._v!==v){cs[i]._v=v;cs[i].style.color=`rgb(${DIM.map((a,k)=>Math.round(a+(LIT[k]-a)*v)).join(',')})`}}};
+const paint=()=>{if(!root.classList.contains('hs'))return;
+  const hh=hdr.offsetHeight,travel=hero.offsetHeight-pin.offsetHeight;
+  const p=travel>0?clamp((hh-hero.getBoundingClientRect().top)/travel):1;
+  wave(headC,clamp(p/HEAD),3.5);
+  const q=clamp((p-HEAD)/SUB),o=clamp(q/.2);
+  sub.style.opacity=o.toFixed(3);sub.style.transform=o<1?`translateY(${((1-o)*14).toFixed(1)}px)`:'';
+  wave(subC,clamp((q-.12)/.88),6)};
+const fit=()=>{hero.style.setProperty('--hh',hdr.offsetHeight+'px');paint()};
+const mode=()=>{root.classList.toggle('hs',!rm.matches);
+  if(rm.matches){[...headC,...subC].forEach(c=>{c.style.color='';c._v=undefined});sub.style.opacity=sub.style.transform=''}
+  fit()};
+let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()})},{passive:true});
+addEventListener('resize',fit);addEventListener('load',fit);document.fonts&&document.fonts.ready.then(fit);
+rm.addEventListener&&rm.addEventListener('change',mode);
+mode();
+}
 /* split the headline (word reveal after the intro) and the section headings/intros (reading effect on scroll) */
 {
 const split=el=>{if(el.querySelector('.w'))return;let n=0;
@@ -508,12 +565,13 @@ new ResizeObserver(()=>measure()).observe(document.querySelector('main'));measur
 const root=document.documentElement,ov=document.getElementById('intro');
 const lg=ov.querySelector('.il'),nav=document.querySelector('.logo svg');
 const ease='cubic-bezier(.65,0,.35,1)',calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const BGO=.132; /* settled background opacity (was .11; +20% relative so the drawing reads more clearly) */
 let timers=[],anims=[],spin=null;
 const clear=()=>{timers.forEach(clearTimeout);anims.forEach(a=>a.cancel());timers=[];anims=[];if(spin){spin.cancel();spin=null}};
 const size=()=>{const W=innerWidth,H=innerHeight,L=Math.min(W,H)*.34;lg.style.width=lg.style.height=L+'px';lg.style.margin=(-L/2)+'px 0 0 '+(-L/2)+'px';return {W,H,L,BG:Math.max(W,H)*.78/L}};
 function settle(BG,from){
   ov.classList.add('bg');ov.style.background='transparent';
-  lg.style.opacity='.11';lg.style.filter='blur(5px)';lg.style.transform=`scale(${BG}) rotate(${from}deg)`;
+  lg.style.opacity=String(BGO);lg.style.filter='blur(5px)';lg.style.transform=`scale(${BG}) rotate(${from}deg)`;
   anims.forEach(a=>a.cancel());anims=[];
   if(!calm)spin=lg.animate([{transform:`scale(${BG}) rotate(${from}deg)`},{transform:`scale(${BG}) rotate(${from+360}deg)`}],{duration:105000,iterations:Infinity});
 }
@@ -528,7 +586,7 @@ function play(){
   timers.push(setTimeout(()=>{
     ov.classList.add('bg');
     anims.push(ov.animate([{background:'rgba(20,20,22,1)'},{background:'rgba(20,20,22,0)'}],{duration:1100,easing:ease,fill:'forwards'}));
-    anims.push(lg.animate([{transform:'scale(1) rotate(240deg)',opacity:1,filter:'blur(0px)'},{transform:`scale(${BG}) rotate(300deg)`,opacity:.11,filter:'blur(5px)'}],{duration:1500,easing:ease,fill:'forwards'}));
+    anims.push(lg.animate([{transform:'scale(1) rotate(240deg)',opacity:1,filter:'blur(0px)'},{transform:`scale(${BG}) rotate(300deg)`,opacity:BGO,filter:'blur(5px)'}],{duration:1500,easing:ease,fill:'forwards'}));
     timers.push(setTimeout(()=>root.classList.add('done'),350));
     timers.push(setTimeout(()=>settle(BG,300),1520));
   },2600));
@@ -616,11 +674,13 @@ function onPanel(e){
 }
 function exportHTML(){
   const c=document.documentElement.cloneNode(true);
-  c.classList.remove('intro','done','nointro','editing');if(!c.className)c.removeAttribute('class');
+  c.classList.remove('intro','done','nointro','editing','hs');if(!c.className)c.removeAttribute('class');
   c.querySelectorAll('#edp,#edcss').forEach(n=>n.remove());
   c.querySelectorAll('[data-ed]').forEach(n=>{n.removeAttribute('data-ed');n.removeAttribute('contenteditable');n.removeAttribute('spellcheck');n.classList.remove('edsel');if(!n.className)n.removeAttribute('class')});
   const ov=c.querySelector('#intro');if(ov){ov.removeAttribute('style');ov.classList.remove('bg');const il=ov.querySelector('.il');il&&il.removeAttribute('style')}
   ['#a1','#a2','#a3','#brainfig .links'].forEach(q=>{const n=c.querySelector(q);if(n)n.innerHTML=''});c.querySelectorAll('.rd .w').forEach(w=>w.style.removeProperty('opacity'));
+  c.querySelectorAll('.hero .vh').forEach(n=>n.remove());c.querySelectorAll('.hero .ln').forEach(n=>{n.removeAttribute('aria-hidden');n.textContent=n.textContent});
+  const hr=c.querySelector('.hero');if(hr){hr.removeAttribute('style');const sb=hr.querySelector('.sub');sb&&sb.removeAttribute('style')}
   c.querySelectorAll('[data-edfont]').forEach(l=>l.dataset.edfont='');
   return '<!DOCTYPE html>\n'+c.outerHTML;
 }
